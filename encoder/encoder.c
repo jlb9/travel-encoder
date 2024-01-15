@@ -14,6 +14,7 @@ uint8_t ps_encoder = 0;
 uint8_t s_encoder = 0;
 uint8_t cs_encoder = 0;
 uint32_t x_press = 0;
+uint32_t counter = 0;
 
 
 uint64_t timer_start = 0;
@@ -24,6 +25,8 @@ uint64_t dbounce_time;
 
 bool start = false;
 bool s_timer = false;
+bool e_timer = false;
+bool i_timer = false;
 bool idle = false;
 
 
@@ -54,10 +57,6 @@ int main ()
         // s_button = (gpio_get(BTN_PIN));
         // printf("%d\n", s_button);
 
-        // sleep_ms(5000);
-        // printf("IDLE - 1 = %d \n", idle);
-        
-
         if (gpio_get(BTN_PIN) == 0) {
             start = true;
             idle = false;
@@ -70,8 +69,41 @@ int main ()
                 printf("Encoder: %d\n", gpio_get(ENCODER));
                 gpio_put(LED_test, 1);
                 gpio_put(LED_PIN, 1);
-
+                
                 while (x_press < 2000) {
+
+                    s_encoder = gpio_get(ENCODER);
+
+                    if((s_encoder != ps_encoder) & s_timer == false) { 
+                        printf("--- not equal ---\n");
+                        timer_start = time_us_32();
+                        s_timer = true;
+                        printf("Start Timer: %lld\n", timer_start);
+                        // if (s_timer == false){
+                        //     timer_start = time_us_32();
+                        //     printf("Start Timer: %lld\n", timer_start);
+                        //     s_timer = true;
+                        // }
+                        // else if(s_timer == true & (s_encoder == ps_encoder)) {
+                        //     e_timer = time_us_32();
+                        //     counter++;
+                        //     if((time_us_32) - 
+                    }
+                    else {
+                        printf("-equal-\n");
+                        printf("start_timer t/f= %d timestamp = %lld\n", s_timer, timer_start);
+                    }
+                        
+
+
+
+
+
+
+
+
+
+
                     if (gpio_get(BTN_PIN) == 0) {
                         // printf("exit: %ld\n", x_press);
                         if (x_press >1998)  {
