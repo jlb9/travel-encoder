@@ -135,7 +135,7 @@ int main ()
                     }
                 }
                 start = false;
-                diff = timer_start - timer_end;
+                diff = timer_end - timer_start;
                 
             }while(start == true);
 
