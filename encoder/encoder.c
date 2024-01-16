@@ -1,3 +1,5 @@
+/*  
+*/
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
@@ -70,7 +72,7 @@ int main ()
                 gpio_put(LED_test, 1);
                 gpio_put(LED_PIN, 1);
                 
-                while (x_press < 2000) {
+                while (x_press < 2000 & start == true) {
 
                     s_encoder = gpio_get(ENCODER);
 
@@ -79,6 +81,8 @@ int main ()
                         timer_start = time_us_32();
                         s_timer = true;
                         printf("Start Timer: %lld\n", timer_start);
+
+                        
                         // if (s_timer == false){
                         //     timer_start = time_us_32();
                         //     printf("Start Timer: %lld\n", timer_start);
@@ -89,11 +93,24 @@ int main ()
                         //     counter++;
                         //     if((time_us_32) - 
                     }
+                    else if ((s_encoder == ps_encoder) & s_timer == true) {
+                        counter++;
+                        if (counter >20) {
+                            timer_end = time_us_32();
+                            printf("Stop Timer: %lld\n", timer_end);
+                            start = false;
+                        }
+
+                    }
                     else {
                         printf("-equal-\n");
-                        printf("start_timer t/f= %d timestamp = %lld\n", s_timer, timer_start);
+                        // printf("start_timer t/f= %d timestamp = %lld\n", s_timer, timer_start);
+                        counter = 0;
                     }
-                        
+                    ps_encoder = s_encoder;
+                    printf("Counter: %d\n", counter);
+
+                
 
 
 
@@ -118,6 +135,7 @@ int main ()
                     }
                 }
                 start = false;
+                diff = timer_start - timer_end;
                 
             }while(start == true);
 
@@ -130,7 +148,8 @@ int main ()
             sleep_ms(100);  //100
             // printf("IDLE - 2= %d \n", idle);
             if (idle == false) {
-                printf("-------  IDLE  -------\n");  
+                printf("-------  IDLE  -------\n");
+                printf("start_timer t/f= %d Start = %lld Stop = %lld Diff = %lld\n", s_timer, timer_start, timer_end, diff); 
             }
             idle = true;
             x_press = 0;        // take out 
